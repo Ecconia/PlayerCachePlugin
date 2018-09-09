@@ -1,0 +1,11 @@
+main: ${groupId}.${artifactId}Plugin
+name: ${artifactId}
+version: ${version}
+api-version: 1.13
+
+author: Ecconia
+description: An API plugin which has a cache for UUID/Playername lookups of players which visited your server.
+
+commands:
+    playercache:
+        permission: playercache
