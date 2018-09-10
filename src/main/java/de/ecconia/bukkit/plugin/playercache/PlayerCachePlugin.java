@@ -6,11 +6,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.ecconia.bukkit.plugin.playercache.logging.CustomLogger;
+
 public class PlayerCachePlugin extends JavaPlugin implements Listener
 {
+	private static CustomLogger logger;
+	
 	@Override
 	public void onLoad()
 	{
+		logger = new CustomLogger(this);
+		
 		//TODO: Establish DB connection.
 		//TODO: Load data from DB.
 		//TODO: Provide API.
