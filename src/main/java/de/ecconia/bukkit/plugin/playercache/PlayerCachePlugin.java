@@ -51,7 +51,7 @@ public class PlayerCachePlugin extends JavaPlugin implements Listener
 		getServer().getPluginManager().registerEvents(this, this);
 	}
 	
-	@EventHandler(priority=EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPreJoin(PlayerLoginEvent event)
 	{
 		getLogger().warning("Login: " + event.getPlayer().getUniqueId() + " - " + event.getPlayer().getName());
