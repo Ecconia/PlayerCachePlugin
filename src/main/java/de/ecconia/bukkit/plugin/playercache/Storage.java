@@ -57,45 +57,6 @@ public class Storage
 		return player == null ? null : player.getCredentials();
 	}
 	
-	//Get the current Name by Name or UUID
-	
-	public String findNameByCurrentName(String name)
-	{
-		Credentials cred = findByCurrentName(name);
-		
-		return cred == null ? null : cred.getName();
-	}
-	
-	public String findNameByName(String name)
-	{
-		Credentials cred = findByName(name);
-		
-		return cred == null ? null : cred.getName();
-	}
-	
-	public String findNameByUUID(UUID uuid)
-	{
-		Credentials cred = findByUUID(uuid);
-		
-		return cred == null ? null : cred.getName();
-	}
-	
-	//Get the UUID by Name or UUID
-	
-	public UUID findUUIDByCurrentName(String name)
-	{
-		Credentials cred = findByCurrentName(name);
-		
-		return cred == null ? null : cred.getUuid();
-	}
-	
-	public UUID findUUIDByName(String name)
-	{
-		Credentials cred = findByName(name);
-		
-		return cred == null ? null : cred.getUuid();
-	}
-	
 	//Check if a player had been on this server before
 	
 	public boolean isKnownByCurrentName(String name)
