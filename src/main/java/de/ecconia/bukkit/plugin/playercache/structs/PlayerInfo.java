@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class PlayerHistory
+public class PlayerInfo
 {
 	//UUID of the player, will never change.
 	private final UUID uuid;
@@ -15,7 +15,7 @@ public class PlayerHistory
 	
 	private NameInfo names[] = new NameInfo[0];
 	
-	public PlayerHistory(UUID uuid)
+	public PlayerInfo(UUID uuid)
 	{
 		this.uuid = uuid;
 	}

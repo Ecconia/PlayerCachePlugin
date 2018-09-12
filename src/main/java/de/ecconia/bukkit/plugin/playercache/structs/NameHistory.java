@@ -14,15 +14,15 @@ public class NameHistory
 	}
 	
 	//Returns the lastest name owner as long as the name is not dirty (unowned).
-	public PlayerHistory getCurrentPlayer()
+	public PlayerInfo getCurrentPlayer()
 	{
-		PlayerHistory player = players.get(players.size() - 1).getPlayer();
+		PlayerInfo player = players.get(players.size() - 1).getPlayer();
 		
 		return player.isDirty() ? null : player;
 	}
 	
 	//Returns the lastest name owner regardless if the name is dirty (unowned).
-	public PlayerHistory getLatestPlayer()
+	public PlayerInfo getLatestPlayer()
 	{
 		return players.get(players.size() - 1).getPlayer();
 	}

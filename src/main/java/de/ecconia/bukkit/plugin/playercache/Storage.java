@@ -6,19 +6,19 @@ import java.util.UUID;
 
 import de.ecconia.bukkit.plugin.playercache.structs.NameHistory;
 import de.ecconia.bukkit.plugin.playercache.structs.NameInfo;
-import de.ecconia.bukkit.plugin.playercache.structs.PlayerHistory;
+import de.ecconia.bukkit.plugin.playercache.structs.PlayerInfo;
 
 public class Storage
 {
 	private final Map<String, NameHistory> nameToPlayer = new HashMap<>();
-	private final Map<UUID, PlayerHistory> uuidToPlayer = new HashMap<>();
+	private final Map<UUID, PlayerInfo> uuidToPlayer = new HashMap<>();
 	
 	public void update(String name, long time, UUID uuid)
 	{
-		PlayerHistory player = uuidToPlayer.get(uuid);
+		PlayerInfo player = uuidToPlayer.get(uuid);
 		if(player == null)
 		{
-			player = new PlayerHistory(uuid);
+			player = new PlayerInfo(uuid);
 			uuidToPlayer.put(uuid, player);
 		}
 		
@@ -43,14 +43,14 @@ public class Storage
 	
 	//Get the current UUID-Name link by Name or UUID
 	
-	public PlayerHistory findByName(String name)
+	public PlayerInfo findByName(String name)
 	{
 		NameHistory nH = nameToPlayer.get(name.toLowerCase());
 		
 		return nH == null ? null : nH.getLatestPlayer();
 	}
 	
-	public PlayerHistory findByUUID(UUID uuid)
+	public PlayerInfo findByUUID(UUID uuid)
 	{
 		return uuidToPlayer.get(uuid);
 	}

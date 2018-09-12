@@ -4,9 +4,9 @@ public class NameInfo
 {
 	private final String name;
 	private final long time;
-	private final PlayerHistory player;
+	private final PlayerInfo player;
 	
-	public NameInfo(String name, long time, PlayerHistory player)
+	public NameInfo(String name, long time, PlayerInfo player)
 	{
 		this.name = name;
 		this.time = time;
@@ -23,7 +23,7 @@ public class NameInfo
 		return time;
 	}
 	
-	public PlayerHistory getPlayer()
+	public PlayerInfo getPlayer()
 	{
 		return player;
 	}
