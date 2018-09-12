@@ -1,41 +1,38 @@
 package de.ecconia.bukkit.plugin.playercache.structs;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class PlayerHistory
 {
 	//UUID of the player, will never change.
 	private final UUID uuid;
-	//Last seen name of the player, will be updated as soon as the player joins.
-	private String currentName;
 	//A boolean indicating the rare case, that the name has been owned by someone else and this one is not up to date anymore.
 	private boolean dirty;
 	
-	private final List<NameInfo> nameHistory = new ArrayList<>();
+	private NameInfo names[] = new NameInfo[0];
 	
 	public PlayerHistory(UUID uuid)
 	{
 		this.uuid = uuid;
 	}
 	
-	public void addUsername(NameInfo nameInfo)
-	{
-		nameHistory.add(nameInfo);
-	}
-	
 	public void updateUsername(NameInfo nameInfo)
 	{
-		addUsername(nameInfo);
-		currentName = nameInfo.getName();
+		NameInfo namesNew[] = new NameInfo[names.length + 1];
+		System.arraycopy(names, 0, namesNew, 1, names.length);
+		namesNew[0] = nameInfo;
+		names = namesNew;
+		
+		dirty = false;
 	}
 	
 	public void checkDirty(String name)
 	{
-		if(name.equalsIgnoreCase(currentName))
+		if(name.equalsIgnoreCase(getName()))
 		{
 			dirty = true;
 		}
@@ -50,7 +47,7 @@ public class PlayerHistory
 	
 	public String getName()
 	{
-		return currentName;
+		return names[0].getName();
 	}
 	
 	public boolean isDirty()
@@ -63,11 +60,23 @@ public class PlayerHistory
 	
 	public Set<String> getPlayernames()
 	{
-		return nameHistory.stream().map(NameInfo::getName).collect(Collectors.toSet());
+		Set<String> nameSet = new HashSet<>(names.length);
+		for(NameInfo info : names)
+		{
+			nameSet.add(info.getName());
+		}
+		
+		return nameSet;
 	}
 	
 	public List<NameInfo> getNameHistory()
 	{
-		return new ArrayList<>(nameHistory);
+		List<NameInfo> nameList = new ArrayList<>(names.length);
+		for(NameInfo info : names)
+		{
+			nameList.add(info);
+		}
+		
+		return nameList;
 	}
 }
