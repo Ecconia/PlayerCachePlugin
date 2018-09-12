@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import de.ecconia.bukkit.plugin.playercache.structs.NameHistory;
+import de.ecconia.bukkit.plugin.playercache.structs.NameInfo;
 import de.ecconia.bukkit.plugin.playercache.structs.PlayerHistory;
 
 public class Storage
@@ -21,8 +22,6 @@ public class Storage
 			uuidToPlayer.put(uuid, player);
 		}
 		
-		player.updateUsername(name, time);
-		
 		NameHistory nameHistory = nameToPlayer.get(name.toLowerCase());
 		if(nameHistory == null)
 		{
@@ -30,7 +29,10 @@ public class Storage
 			nameToPlayer.put(name.toLowerCase(), nameHistory);
 		}
 		
-		nameHistory.update(player);
+		NameInfo nameInfo = new NameInfo(name, time, player);
+		
+		player.updateUsername(nameInfo);
+		nameHistory.update(nameInfo);
 	}
 	
 	/*Minimum API Requirement:

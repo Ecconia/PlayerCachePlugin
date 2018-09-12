@@ -1,23 +1,29 @@
 package de.ecconia.bukkit.plugin.playercache.structs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NameHistory
 {
-	public void update(PlayerHistory player)
+	private final List<NameInfo> players = new ArrayList<>();
+	
+	public void update(NameInfo nameInfo)
 	{
-		//TODO: Don't forget implementation.
+		getLatestPlayer().checkDirty(nameInfo.getName());
+		players.add(nameInfo);
 	}
 	
 	//Returns the lastest name owner as long as the name is not dirty (unowned).
 	public PlayerHistory getCurrentPlayer()
 	{
-		//TODO: Don't forget implementation.
-		return null;
+		PlayerHistory player = players.get(players.size() - 1).getPlayer();
+		
+		return player.isDirty() ? null : player;
 	}
 	
 	//Returns the lastest name owner regardless if the name is dirty (unowned).
 	public PlayerHistory getLatestPlayer()
 	{
-		//TODO: Don't forget implementation.
-		return null;
+		return players.get(players.size() - 1).getPlayer();
 	}
 }

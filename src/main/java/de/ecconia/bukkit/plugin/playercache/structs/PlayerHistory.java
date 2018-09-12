@@ -1,33 +1,47 @@
 package de.ecconia.bukkit.plugin.playercache.structs;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PlayerHistory
 {
+	//UUID of the player, will never change.
 	private final UUID uuid;
+	//Last seen name of the player, will be updated as soon as the player joins.
 	private String currentName;
+	//A boolean indicating the rare case, that the name has been owned by someone else and this one is not up to date anymore.
+	private boolean dirty;
 	
-	private final Map<Long, String> nameHistory = new HashMap<>();
+	private final List<NameInfo> nameHistory = new ArrayList<>();
 	
 	public PlayerHistory(UUID uuid)
 	{
 		this.uuid = uuid;
 	}
 	
-	public void addUsername(String name, long time)
+	public void addUsername(NameInfo nameInfo)
 	{
-		nameHistory.put(time, name);
+		nameHistory.add(nameInfo);
 	}
 	
-	public void updateUsername(String name, long time)
+	public void updateUsername(NameInfo nameInfo)
 	{
-		addUsername(name, time);
-		currentName = name;
+		addUsername(nameInfo);
+		currentName = nameInfo.getName();
 	}
+	
+	public void checkDirty(String name)
+	{
+		if(name.equalsIgnoreCase(currentName))
+		{
+			dirty = true;
+		}
+	}
+	
+	//Get the last seen name and UUID of this player.
 	
 	public UUID getUuid()
 	{
@@ -39,14 +53,21 @@ public class PlayerHistory
 		return currentName;
 	}
 	
-	public Set<String> getPlayernames()
+	public boolean isDirty()
 	{
-		return new HashSet<>(nameHistory.values());
+		return dirty;
 	}
 	
-	public Map<Long, String> getNameHistory()
+	//Get the name history of this player.
+	//The non-final data storage will be copied.
+	
+	public Set<String> getPlayernames()
 	{
-		//Create a copy, to not update data somewhere.
-		return new HashMap<>(nameHistory);
+		return nameHistory.stream().map(NameInfo::getName).collect(Collectors.toSet());
+	}
+	
+	public List<NameInfo> getNameHistory()
+	{
+		return new ArrayList<>(nameHistory);
 	}
 }
