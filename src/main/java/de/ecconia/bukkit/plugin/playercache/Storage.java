@@ -6,12 +6,12 @@ import java.util.Set;
 import java.util.UUID;
 
 import de.ecconia.bukkit.plugin.playercache.structs.Credentials;
+import de.ecconia.bukkit.plugin.playercache.structs.NameHistory;
 import de.ecconia.bukkit.plugin.playercache.structs.PlayerHistory;
 
 public class Storage
 {
-	private final Map<String, PlayerHistory> latestNameToPlayer = new HashMap<>();
-	private final Map<String, PlayerHistory> nameToPlayer = new HashMap<>();
+	private final Map<String, NameHistory> nameToPlayer = new HashMap<>();
 	private final Map<UUID, PlayerHistory> uuidToPlayer = new HashMap<>();
 	
 	public void update(String name, long time, UUID uuid)
@@ -22,26 +22,26 @@ public class Storage
 			player = new PlayerHistory(uuid);
 			uuidToPlayer.put(uuid, player);
 		}
-		else
-		{
-			//Remove last playername
-			latestNameToPlayer.remove(player.getCredentials().getName().toLowerCase());
-		}
 		
 		player.updateUsername(name, time);
 		
-		nameToPlayer.put(name.toLowerCase(), player);
-		latestNameToPlayer.put(name.toLowerCase(), player);
+		NameHistory nameHistory = nameToPlayer.get(name.toLowerCase());
+		if(nameHistory == null)
+		{
+			nameHistory = new NameHistory();
+			nameToPlayer.put(name.toLowerCase(), nameHistory);
+		}
+		
+		nameHistory.update(player);
 	}
+	
+	/*Minimum API Requirement:
+	 * Get the current username of a player by UUID
+	 * Get the the UUID of the last player owning a name
+	 * Get all playernames a player owned before (get by UUID)
+	 */
 	
 	//Get the current UUID-Name link by Name or UUID
-	
-	public Credentials findByCurrentName(String name)
-	{
-		PlayerHistory player = latestNameToPlayer.get(name.toLowerCase());
-		
-		return player == null ? null : player.getCredentials();
-	}
 	
 	public Credentials findByName(String name)
 	{
@@ -58,11 +58,6 @@ public class Storage
 	}
 	
 	//Check if a player had been on this server before
-	
-	public boolean isKnownByCurrentName(String name)
-	{
-		return latestNameToPlayer.get(name.toLowerCase()) != null;
-	}
 	
 	public boolean isKnownByName(String name)
 	{
