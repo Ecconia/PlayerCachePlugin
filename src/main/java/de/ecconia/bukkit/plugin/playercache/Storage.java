@@ -2,10 +2,8 @@ package de.ecconia.bukkit.plugin.playercache;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
-import de.ecconia.bukkit.plugin.playercache.structs.Credentials;
 import de.ecconia.bukkit.plugin.playercache.structs.NameHistory;
 import de.ecconia.bukkit.plugin.playercache.structs.PlayerHistory;
 
@@ -43,38 +41,29 @@ public class Storage
 	
 	//Get the current UUID-Name link by Name or UUID
 	
-	public Credentials findByName(String name)
+	public PlayerHistory findByName(String name)
 	{
-		PlayerHistory player = nameToPlayer.get(name.toLowerCase());
+		NameHistory nH = nameToPlayer.get(name.toLowerCase());
 		
-		return player == null ? null : player.getCredentials();
+		return nH == null ? null : nH.getLatestPlayer();
 	}
 	
-	public Credentials findByUUID(UUID uuid)
+	public PlayerHistory findByUUID(UUID uuid)
 	{
-		PlayerHistory player = uuidToPlayer.get(uuid);
-		
-		return player == null ? null : player.getCredentials();
+		return uuidToPlayer.get(uuid);
 	}
 	
 	//Check if a player had been on this server before
 	
 	public boolean isKnownByName(String name)
 	{
-		return nameToPlayer.get(name.toLowerCase()) != null;
+		NameHistory nH = nameToPlayer.get(name.toLowerCase());
+		
+		return nH == null;
 	}
 	
 	public boolean isKnownByUUID(UUID uuid)
 	{
 		return uuidToPlayer.get(uuid) != null;
-	}
-	
-	//Get name history from player
-	
-	public Set<String> getNameSetByUUID(UUID uuid)
-	{
-		PlayerHistory player = uuidToPlayer.get(uuid);
-		
-		return player.getPlayernames();
 	}
 }

@@ -29,9 +29,14 @@ public class PlayerHistory
 		currentName = name;
 	}
 	
-	public Credentials getCredentials()
+	public UUID getUuid()
 	{
-		return new Credentials(currentName, uuid);
+		return uuid;
+	}
+	
+	public String getName()
+	{
+		return currentName;
 	}
 	
 	public Set<String> getPlayernames()
