@@ -13,15 +13,19 @@ public class PlayerInfo
 	//A boolean indicating the rare case, that the name has been owned by someone else and this one is not up to date anymore.
 	private boolean dirty;
 	
-	private NameInfo names[] = new NameInfo[0];
+	private NameInfo names[] = new NameInfo[1];
 	
-	public PlayerInfo(UUID uuid)
+	public PlayerInfo(UUID uuid, NameInfo firstName)
 	{
 		this.uuid = uuid;
+		names[0] = firstName;
+		firstName.setPlayer(this);
 	}
 	
 	public void updateUsername(NameInfo nameInfo)
 	{
+		nameInfo.setPlayer(this);
+		
 		NameInfo namesNew[] = new NameInfo[names.length + 1];
 		System.arraycopy(names, 0, namesNew, 1, names.length);
 		namesNew[0] = nameInfo;

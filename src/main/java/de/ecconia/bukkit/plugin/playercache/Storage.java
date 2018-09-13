@@ -15,24 +15,29 @@ public class Storage
 	
 	public void update(String name, long time, UUID uuid)
 	{
+		NameInfo nameInfo = new NameInfo(name, time);
+		
 		PlayerInfo player = uuidToPlayer.get(uuid);
 		if(player == null)
 		{
-			player = new PlayerInfo(uuid);
+			player = new PlayerInfo(uuid, nameInfo);
 			uuidToPlayer.put(uuid, player);
+		}
+		else
+		{
+			player.updateUsername(nameInfo);
 		}
 		
 		NameHistory nameHistory = nameToPlayer.get(name.toLowerCase());
 		if(nameHistory == null)
 		{
-			nameHistory = new NameHistory();
+			nameHistory = new NameHistory(nameInfo);
 			nameToPlayer.put(name.toLowerCase(), nameHistory);
 		}
-		
-		NameInfo nameInfo = new NameInfo(name, time, player);
-		
-		player.updateUsername(nameInfo);
-		nameHistory.update(nameInfo);
+		else
+		{
+			nameHistory.update(nameInfo);
+		}
 	}
 	
 	/*Minimum API Requirement:

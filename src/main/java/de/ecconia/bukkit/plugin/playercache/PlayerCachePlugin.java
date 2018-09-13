@@ -1,6 +1,7 @@
 package de.ecconia.bukkit.plugin.playercache;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,6 +16,7 @@ public class PlayerCachePlugin extends JavaPlugin implements Listener
 {
 	private CustomLogger logger;
 	private DBAdapter dba;
+	private Storage storage;
 	
 	@Override
 	public void onLoad()
@@ -32,13 +34,15 @@ public class PlayerCachePlugin extends JavaPlugin implements Listener
 		{
 			dba = new DBAdapter("jdbc:mysql://localhost/" + database + "?user=" + username + "&password=" + password + "&useSSL=false", logger, prefix);
 		}
-		catch (SQLException e)
+		catch(SQLException e)
 		{
 			logger.error("Attempted to login using: '" + url + "'.");
 			e.printStackTrace();
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
+		
+		storage = new Storage();
 		
 		//TODO: Load data from DB.
 		//TODO: Provide API.
@@ -52,8 +56,14 @@ public class PlayerCachePlugin extends JavaPlugin implements Listener
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPreJoin(PlayerLoginEvent event)
+	public void onLogin(PlayerLoginEvent event)
 	{
-		getLogger().warning("Login: " + event.getPlayer().getUniqueId() + " - " + event.getPlayer().getName());
+		String name = event.getPlayer().getName();
+		UUID uuid = event.getPlayer().getUniqueId();
+		long time = System.currentTimeMillis();
+		
+		//TODO: Remove debug
+		getLogger().warning("Login: " + uuid + " - " + name);
+		storage.update(name, time, uuid);
 	}
 }
